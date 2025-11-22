@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dilim Dilim Pizza </title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #fbe7c6;
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+        form {
+            background-color: white;
+            width: 400px;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color:  #ff4757;
+        }
+        input, select, textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        textarea {
+        resize: vertical;
+    }
+        input[type="radio"], input[type="checkbox"] {
+            width: auto;
+        }
+        .modal-perde {
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-kutu {
+            background: white; padding: 30px; border-radius: 20px;
+            text-align: center; width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: kutuAcil 0.4s ease;
+        }
+        @keyframes kutuAcil { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+    <form onsubmit="siparisVer(event)">
+        <fieldset>
+            <legend>Müşteri Bilgileri</legend>
+            <label>Adınız Soyadınız</label>
+            <input type="text" required><br>
+            <label>Telefon</label>
+            <input type="tel"><br>
+            <label>Adres</label>
+            <textarea rows="3"></textarea>
+        </fieldset>
+        <fieldset>
+            <legend>Pizza Boyutu</legend>
+            <input type="radio" name="boyut" value="kucuk">Küçük<br>
+            <input type="radio" name="boyut" value="orta" checked>Orta<br>
+            <input type="radio" name="boyut" value="buyuk">Büyük
+        </fieldset>
+        <fieldset>
+            <legend>Ekstra Malzemeler</legend>
+            <input type="checkbox" name="ekstra" value="mantar">Mantar<br>
+            <input type="checkbox" name="ekstra" value="mısır">Mısır<br>
+            <input type="checkbox" name="ekstra" value="biber">Biber
+        </fieldset>
+        <fieldset>
+        <select name="İcecek">
+            <option value="yok">İçecek İstemiyorum</option>
+            <option value="kola">Kola</option>
+            <option value="ayran">Ayran</option>
+            <option value="sprite">Sprite</option>
+        </select>
+        <button type="submit">Siparişi Tamamla</button>
+        </fieldset>
+    </form>
+    <div id="ozetModal" class="modal-perde">
+        <div class="modal-kutu">
+            <div style="font-size: 50px;">🛵</div>
+            <h2 style="color: #ff6b6b; margin: 10px 0;">Sipariş Alındı!</h2>
+            
+            <p id="modalMetni" style="color: #555; line-height: 1.6;"></p>
+            
+            <button onclick="modaliKapat()" style="background: #333; margin-top: 15px;">Tamamdır</button>
+        </div>
+    </div>
+<script>
+    function siparisVer(olay) {
+        olay.preventDefault();
+
+        
+        var isim = document.querySelector('input[type=text]').value;
+        var boyut = document.querySelector('input[name="boyut"]:checked').value;
+        var icecek = document.querySelector('select[name="İcecek"]').value;
+        
+        
+        var ekstralar = [];
+        var kutular = document.querySelectorAll('input[name="ekstra"]:checked');
+        kutular.forEach(function(kutu) { ekstralar.push(kutu.value); });
+        var ekstraMetni = ekstralar.length > 0 ? ekstralar.join(", ") : "Yok";
+
+       
+        var mesaj = "Sayın <b>" + isim + "</b>,<br>" +
+                    "Seçim: <b>" + boyut + " Boy Pizza</b><br>" +
+                    "Ekstralar: <b>" + ekstraMetni + "</b><br>" +
+                    "İçecek: <b>" + icecek + "</b><br><br>" +
+                    "Siparişiniz hazırlanıyor...";
+
+        
+        document.getElementById('modalMetni').innerHTML = mesaj;
+        document.getElementById('ozetModal').style.display = 'flex';
+    }
+
+   
+    function modaliKapat() {
+        document.getElementById('ozetModal').style.display = 'none';
+    }
+</script>
+</body>
+</html>
